@@ -11,6 +11,7 @@
     "node": ">= 5"
   },
   "dependencies": {
-    "express": "^4.13.3"
+    "express": "^4.13.3",
+    "interpolate": "^0.1.0"
   }
 }

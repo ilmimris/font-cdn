@@ -1,0 +1,15 @@
+{
+  "name": "font-cdn",
+  "private": true,
+  "version": "1.0.0",
+  "license": "MIT",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "engines": {
+    "node": ">= 5"
+  },
+  "dependencies": {
+    "express": "^4.13.3"
+  }
+}

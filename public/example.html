@@ -1,0 +1,36 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Font CDN Example</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+    @font-face {
+      font-family: 'Montserrat';
+      font-weight: 400;
+      font-style: normal;
+      src: local('Montserrat-Regular'),
+           url('http://localhost:3000/fonts/Montserrat-regular.woff2') format('woff2'),
+           url('http://localhost:3000/fonts/Montserrat-regular.woff') format('woff');
+      }
+
+      @font-face {
+        font-family: 'Montserrat';
+        font-weight: 700;
+        font-style: normal;
+        src: local('Montserrat-Bold'),
+             url('http://localhost:3000/fonts/Montserrat-700.woff2') format('woff2'),
+             url('http://localhost:3000/fonts/Montserrat-700.woff') format('woff');
+      }
+
+      html, body {
+        font-family: 'Montserrat', monospace; /* If it renders as monospace, something is wrong!! */
+        font-size: 60px;
+      }
+    </style>
+  </head>
+  <body>
+    <p>Hello <b>world</b>! This is <b>HTML5</b> Boilerplate.</p>
+  </body>
+</html>

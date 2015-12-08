@@ -12,6 +12,7 @@
   },
   "dependencies": {
     "express": "^4.13.3",
+    "glob": "^6.0.1",
     "interpolate": "^0.1.0"
   }
 }

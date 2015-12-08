@@ -6,6 +6,7 @@ var express = require('express');
 var http = require('http');
 var fs = require('fs');
 var interpolate = require('interpolate');
+var glob = require("glob");
 var app = express();
 
 app.set('port', process.env.PORT || 3000);
@@ -13,6 +14,20 @@ app.disable('x-powered-by');
 
 var fontFaceTemplate = fs.readFileSync('./css/font-face-template.css', 'utf8');
 
+// TOOD extract this into module
+var availableFonts = {};
+glob.sync("./public/fonts/*.@(woff|woff2)").forEach(function(fontPath) {
+  var filename = fontPath.replace("./public/fonts/", "").replace(/\.woff2?$/, "");
+  var family = filename.split("-")[0];
+  var weight = filename.split("-")[1];
+  availableFonts[family] = availableFonts[family] || [];
+  if (availableFonts[family].indexOf(weight) === -1) {
+    availableFonts[family].push(weight);
+  }
+});
+console.log("Available fonts: ", JSON.stringify(availableFonts, null, 2));
+
+// TOOD extract this into module
 var staticMiddleware = express.static('public', {
   dotfiles: 'ignore',
   etag: false,
@@ -28,6 +43,7 @@ var staticMiddleware = express.static('public', {
 });
 app.use(staticMiddleware);
 
+// TOOD extract this into module
 var parseFonts = function(familyQueryString) {
   return familyQueryString.split("|").map(function(familySubstring) {
     return {
@@ -35,9 +51,10 @@ var parseFonts = function(familyQueryString) {
       weights: familySubstring.split(":")[1].split(","),
     };
   });
-}
+};
 
-app.get("/css", function(req, res) {
+// TOOD extract most of this into above font query string parser module
+app.get("/css", function(req, res, next) {
   res.set("access-control-allow-origin", "*");
   res.set("x-frame-options", "SAMEORIGIN");
   res.set("content-type", "text/css");
@@ -45,10 +62,33 @@ app.get("/css", function(req, res) {
   res.set("x-content-type-options", "nosniff");
   res.set("x-xss-protection", "1; mode=block");
 
-  var fonts = parseFonts(req.query.family);
+  var familyQueryString = req.query.family;
+  if (!familyQueryString || familyQueryString === "") {
+    res.send("Must provide `family` query param.");
+    return next();
+  }
+  var fonts;
+  try {
+    fonts = parseFonts(req.query.family);
+  } catch (e) {
+    res.send("Invalid `family` query param value.");
+    return next();
+  }
   var css = "";
+  var hasError = false;
   fonts.forEach(function(font) {
+    if (hasError) return;
+    if (!(font.family in availableFonts)) {
+      res.send(font.family + " is not an available font family.");
+      hasError = true;
+      return;
+    }
     font.weights.forEach(function(weight) {
+      if (availableFonts[font.family].indexOf(weight) === -1) {
+        res.send(font.family + " only supports font weights of " + availableFonts[font.family].join(",") + " but got " + weight + ".");
+        hasError = true;
+        return;
+      }
       css += interpolate(fontFaceTemplate, {
         baseUrl: baseUrl,
         fontFamily: font.family,
@@ -56,7 +96,14 @@ app.get("/css", function(req, res) {
       });
     });
   });
-  res.send(css);
+
+  if (hasError) {
+    next();
+  }
+  else {
+    res.send(css);
+    next();
+  }
 });
 
 http.createServer(app).listen(app.get('port'), function() {

@@ -16,9 +16,11 @@ var logger = require('morgan');
 var errorHandler = require('errorhandler');
 var forceSsl = require('express-enforces-ssl');
 
+var FontQueryStringParser = require(path.join(global.__base, 'lib', 'font-query-string-parser'));
 var setCorsHeaders = require(path.join(global.__base, 'lib', 'set-cors-headers'));
-var app = express();
+var fontFaceTemplate = fs.readFileSync(path.join(global.__base, 'css', 'font-face-template.css'), 'utf8');
 
+var app = express();
 app.set('port', process.env.PORT || 3000);
 
 // Disable some default headers set by Express
@@ -39,52 +41,29 @@ else {
 
 app.use(require(path.join(global.__base, 'lib', 'static-assets-middleware')));
 
-var fontFaceTemplate = fs.readFileSync(path.join(global.__base, 'css', 'font-face-template.css'), 'utf8');
-
-// TOOD extract this into module
-var parseFonts = function(familyQueryString) {
-  return familyQueryString.split("|").map(function(familySubstring) {
-    return {
-      family: familySubstring.split(":")[0],
-      weights: familySubstring.split(":")[1].split(","),
-    };
-  });
-};
-
-// TOOD extract most of this into above font query string parser module
 app.get("/css", function(req, res, next) {
   setCorsHeaders(res);
   res.set("x-frame-options", "SAMEORIGIN");
   res.set("content-type", "text/css");
   res.set("cache-control", "private, max-age=86400, stale-while-revalidate=604800");
 
-  var familyQueryString = req.query.family;
-  if (!familyQueryString || familyQueryString === "") {
-    res.send("Must provide `family` query param.");
+  var parser = new FontQueryStringParser(req.query.family);
+  if (!parser.isQueryValid()) {
+    res.send(parser.queryValidationErrors());
     return next();
   }
-  var fonts;
-  try {
-    fonts = parseFonts(req.query.family);
-  } catch (e) {
-    res.send("Invalid `family` query param value.");
+  if (!parser.areFamiliesValid()) {
+    res.send(parser.familyValidationErrors());
     return next();
   }
+  if (!parser.areWeightsValid()) {
+    res.send(parser.weightValidationErrors());
+    return next();
+  }
+
   var css = "";
-  var hasError = false;
-  fonts.forEach(function(font) {
-    if (hasError) return;
-    if (!global.fonts.isFamilyAvailable(font.family)) {
-      res.send(font.family + " is not an available font family.");
-      hasError = true;
-      return;
-    }
+  parser.fonts.forEach(function(font) {
     font.weights.forEach(function(weight) {
-      if (!global.fonts.isWeightAvailable(font.family, weight)) {
-        res.send(font.family + " only supports font weights of " + global.fonts.weightsFor(font.family).join(",") + " but got " + weight + ".");
-        hasError = true;
-        return;
-      }
       css += interpolate(fontFaceTemplate, {
         baseUrl: baseUrl,
         fontFamily: font.family,
@@ -93,13 +72,7 @@ app.get("/css", function(req, res, next) {
     });
   });
 
-  if (hasError) {
-    next();
-  }
-  else {
-    res.send(css);
-    next();
-  }
+  res.send(css);
 });
 
 http.createServer(app).listen(app.get('port'), function() {

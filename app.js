@@ -1,8 +1,13 @@
 'use strict';
 
-global.__base = __dirname + '/';
+var path = require('path');
+
 var env = process.env.NODE_ENV || 'development';
 var baseUrl = process.env.BASE_URL || 'http://localhost:3000';
+global.__base = __dirname + '/';
+var AvailableFonts = require(path.join(global.__base, 'lib', 'available-fonts'));
+global.fonts = new AvailableFonts();
+
 var express = require('express');
 var http = require('http');
 var fs = require('fs');
@@ -10,7 +15,7 @@ var interpolate = require('interpolate');
 var logger = require('morgan');
 var errorHandler = require('errorhandler');
 var forceSsl = require('express-enforces-ssl');
-var path = require('path');
+
 var setCorsHeaders = require(path.join(global.__base, 'lib', 'set-cors-headers'));
 var app = express();
 
@@ -35,7 +40,6 @@ else {
 app.use(require(path.join(global.__base, 'lib', 'static-assets-middleware')));
 
 var fontFaceTemplate = fs.readFileSync(path.join(global.__base, 'css', 'font-face-template.css'), 'utf8');
-var availableFonts = require(path.join(global.__base, 'lib', 'available-fonts'))();
 
 // TOOD extract this into module
 var parseFonts = function(familyQueryString) {
@@ -70,14 +74,14 @@ app.get("/css", function(req, res, next) {
   var hasError = false;
   fonts.forEach(function(font) {
     if (hasError) return;
-    if (!(font.family in availableFonts)) {
+    if (!global.fonts.isFamilyAvailable(font.family)) {
       res.send(font.family + " is not an available font family.");
       hasError = true;
       return;
     }
     font.weights.forEach(function(weight) {
-      if (availableFonts[font.family].indexOf(weight) === -1) {
-        res.send(font.family + " only supports font weights of " + availableFonts[font.family].join(",") + " but got " + weight + ".");
+      if (!global.fonts.isWeightAvailable(font.family, weight)) {
+        res.send(font.family + " only supports font weights of " + global.fonts.weightsFor(font.family).join(",") + " but got " + weight + ".");
         hasError = true;
         return;
       }
@@ -100,5 +104,5 @@ app.get("/css", function(req, res, next) {
 
 http.createServer(app).listen(app.get('port'), function() {
   console.log('Server listening on port ' + app.get('port'));
-  console.log("Available fonts: ", JSON.stringify(availableFonts, null, 2));
+  console.log("Available fonts: ", JSON.stringify(global.fonts.asJSON(), null, 2));
 });

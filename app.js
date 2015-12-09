@@ -14,7 +14,10 @@ var setCorsHeaders = require(path.join(__dirname, 'lib', 'set-cors-headers'));
 var app = express();
 
 app.set('port', process.env.PORT || 3000);
-app.disable('x-powered-by');
+
+// Disable some default headers set by Express
+app.set('etag', false);
+app.set('x-powered-by', false);
 
 // Environment-specific configuration
 if (env === 'production') {
@@ -61,7 +64,8 @@ app.get("/css", function(req, res, next) {
   setCorsHeaders(res);
   res.set("x-frame-options", "SAMEORIGIN");
   res.set("content-type", "text/css");
-  
+  res.set("cache-control", "private, max-age=86400, stale-while-revalidate=604800");
+
   var familyQueryString = req.query.family;
   if (!familyQueryString || familyQueryString === "") {
     res.send("Must provide `family` query param.");

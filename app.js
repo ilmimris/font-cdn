@@ -65,8 +65,8 @@ app.get("/css", function(req, res, next) {
   parser.fonts.forEach(function(font) {
     font.weights.forEach(function(weight) {
       css += interpolate(fontFaceTemplate, {
-        baseUrl: baseUrl,
         fontFamily: font.family,
+        fontUrl: baseUrl + '/fonts/' + font.family.replace(/\s/g, "-") + '-' + weight,
         fontWeight: weight,
       });
     });

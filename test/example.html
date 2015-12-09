@@ -6,16 +6,21 @@
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <link rel="stylesheet" href="http://localhost:3000/css?family=Montserrat:400,700">
+    <link rel="stylesheet" href="http://localhost:3000/css?family=Montserrat:400,700|Bitstream+Vera+Sans+Mono:400">
 
     <style>
-      html, body {
+      p {
         font-family: 'Montserrat', monospace; /* If it renders as monospace, something is wrong!! */
-        font-size: 60px;
+        font-size: 40px;
+      }
+      pre {
+        font-family: 'Bitstream Vera Sans Mono', serif; /* If it renders as serif, something is wrong!! */
+        font-size: 25px;
       }
     </style>
   </head>
   <body>
-    <p>Hello <b>world</b>! This is <b>HTML5</b> Boilerplate.</p>
+    <p>Hello <b>world</b>! This should render in <b>Montserrat</b>.</p>
+    <pre>Hello world! This should render in Bitstream Vera Sans Mono.</pre>
   </body>
 </html>

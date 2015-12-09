@@ -4,9 +4,18 @@
 
 ## How it works
 
-Boot it up with `npm start`, and access [http://localhost:3000/css?family=Montserrat:400,700](http://localhost:3000/css?family=Montserrat:400,700). This will produce the following CSS, with CORS enabled:
+- Boot it up with `npm start`
+- Visit [http://localhost:3000/css?family=Bitstream+Vera+Sans+Mono:400|Montserrat:400,700](http://localhost:3000/css?family=Bitstream+Vera+Sans+Mono:400|Montserrat:400,700)
+- This will produce the following CSS, with CORS enabled:
 
 ```css
+@font-face {
+  font-family: 'Bitstream Vera Sans Mono';
+  font-weight: 400;
+  font-style: normal;
+  src: url('http://localhost:3000/fonts/Bitstream-Vera-Sans-Mono-400.woff2') format('woff2'),
+       url('http://localhost:3000/fonts/Bitstream-Vera-Sans-Mono-400.woff') format('woff');
+}
 @font-face {
   font-family: 'Montserrat';
   font-weight: 400;
@@ -25,6 +34,6 @@ Boot it up with `npm start`, and access [http://localhost:3000/css?family=Montse
 
 ## Installing new fonts
 
-Add fonts to the `/public/fonts` directory. Only `woff` and `woff2` formats are supported. 
+Add fonts to the `/public/fonts` directory. Only `woff` and `woff2` formats are supported.
 
 The naming format is `{font-family}-{font-weight}.{extension}`. Example: `Futura-100.woff`.

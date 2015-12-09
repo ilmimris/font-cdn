@@ -2,6 +2,6 @@
   font-family: '{fontFamily}';
   font-weight: {fontWeight};
   font-style: normal;
-  src: url('{baseUrl}/fonts/{fontFamily}-{fontWeight}.woff2') format('woff2'),
-       url('{baseUrl}/fonts/{fontFamily}-{fontWeight}.woff') format('woff');
+  src: url('{fontUrl}.woff2') format('woff2'),
+       url('{fontUrl}.woff') format('woff');
 }

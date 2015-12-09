@@ -1,5 +1,6 @@
 'use strict';
 
+global.__base = __dirname + '/';
 var env = process.env.NODE_ENV || 'development';
 var baseUrl = process.env.BASE_URL || 'http://localhost:3000';
 var express = require('express');
@@ -10,7 +11,7 @@ var logger = require('morgan');
 var errorHandler = require('errorhandler');
 var forceSsl = require('express-enforces-ssl');
 var path = require('path');
-var setCorsHeaders = require(path.join(__dirname, 'lib', 'set-cors-headers'));
+var setCorsHeaders = require(path.join(global.__base, 'lib', 'set-cors-headers'));
 var app = express();
 
 app.set('port', process.env.PORT || 3000);
@@ -31,23 +32,10 @@ else {
   app.use(errorHandler({dumpExceptions: true, showStack: true}));
 }
 
-var fontFaceTemplate = fs.readFileSync(path.join(__dirname, 'css', 'font-face-template.css'), 'utf8');
+app.use(require(path.join(global.__base, 'lib', 'static-assets-middleware')));
 
-var availableFonts = require(path.join(__dirname, 'lib', 'available-fonts'))();
-console.log("Available fonts: ", JSON.stringify(availableFonts, null, 2));
-
-// TOOD extract this into module
-var staticMiddleware = express.static('public', {
-  dotfiles: 'ignore',
-  etag: false,
-  index: false,
-  maxAge: '30d',
-  redirect: false,
-  setHeaders: function (res, path, stat) {
-    setCorsHeaders(res);
-  },
-});
-app.use(staticMiddleware);
+var fontFaceTemplate = fs.readFileSync(path.join(global.__base, 'css', 'font-face-template.css'), 'utf8');
+var availableFonts = require(path.join(global.__base, 'lib', 'available-fonts'))();
 
 // TOOD extract this into module
 var parseFonts = function(familyQueryString) {
@@ -112,4 +100,5 @@ app.get("/css", function(req, res, next) {
 
 http.createServer(app).listen(app.get('port'), function() {
   console.log('Server listening on port ' + app.get('port'));
+  console.log("Available fonts: ", JSON.stringify(availableFonts, null, 2));
 });

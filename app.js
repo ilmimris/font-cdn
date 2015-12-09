@@ -9,6 +9,7 @@ var interpolate = require('interpolate');
 var logger = require('morgan');
 var errorHandler = require('errorhandler');
 var forceSsl = require('express-enforces-ssl');
+var path = require('path');
 var app = express();
 
 app.set('port', process.env.PORT || 3000);
@@ -26,10 +27,9 @@ else {
   app.use(errorHandler({dumpExceptions: true, showStack: true}));
 }
 
-var fontFaceTemplate = fs.readFileSync('./css/font-face-template.css', 'utf8');
+var fontFaceTemplate = fs.readFileSync(path.join(__dirname, 'css', 'font-face-template.css'), 'utf8');
 
-// TOOD extract this into module
-var availableFonts = require("./lib/available_fonts")();
+var availableFonts = require(path.join(__dirname, 'lib', 'available-fonts'))();
 console.log("Available fonts: ", JSON.stringify(availableFonts, null, 2));
 
 // TOOD extract this into module

@@ -5,16 +5,16 @@
 ## How it works
 
 - Boot it up with `npm start`
-- Visit [http://localhost:3000/css?family=Bitstream+Vera+Sans+Mono:400|Montserrat:400,700](http://localhost:3000/css?family=Bitstream+Vera+Sans+Mono:400|Montserrat:400,700)
+- Visit [http://localhost:3000/css?family=Bitstream+Vera+Sans+Mono:400italic|Montserrat:400,700](http://localhost:3000/css?family=Bitstream+Vera+Sans+Mono:400italic|Montserrat:400,700)
 - This will produce the following CSS, with CORS enabled:
 
 ```css
 @font-face {
   font-family: 'Bitstream Vera Sans Mono';
   font-weight: 400;
-  font-style: normal;
-  src: url('http://localhost:3000/fonts/Bitstream-Vera-Sans-Mono-400.woff2') format('woff2'),
-       url('http://localhost:3000/fonts/Bitstream-Vera-Sans-Mono-400.woff') format('woff');
+  font-style: italic;
+  src: url('http://localhost:3000/fonts/Bitstream-Vera-Sans-Mono-400italic.woff2') format('woff2'),
+       url('http://localhost:3000/fonts/Bitstream-Vera-Sans-Mono-400italic.woff') format('woff');
 }
 @font-face {
   font-family: 'Montserrat';

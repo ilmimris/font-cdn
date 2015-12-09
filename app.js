@@ -56,18 +56,19 @@ app.get("/css", function(req, res, next) {
     res.send(parser.familyValidationErrors());
     return next();
   }
-  if (!parser.areWeightsValid()) {
-    res.send(parser.weightValidationErrors());
+  if (!parser.areVariantsValid()) {
+    res.send(parser.variantValidationErrors());
     return next();
   }
 
   var css = "";
   parser.fonts.forEach(function(font) {
-    font.weights.forEach(function(weight) {
+    font.variants.forEach(function(variant) {
       css += interpolate(fontFaceTemplate, {
-        fontFamily: font.family,
-        fontUrl: baseUrl + '/fonts/' + font.family.replace(/\s/g, "-") + '-' + weight,
-        fontWeight: weight,
+        fontFamily: variant.family,
+        fontUrl: baseUrl + variant.path(),
+        fontWeight: variant.weight,
+        fontStyle: variant.style,
       });
     });
   });

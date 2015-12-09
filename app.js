@@ -7,10 +7,21 @@ var http = require('http');
 var fs = require('fs');
 var interpolate = require('interpolate');
 var glob = require("glob");
+var logger = require('morgan');
+var errorHandler = require('errorhandler');
 var app = express();
 
 app.set('port', process.env.PORT || 3000);
 app.disable('x-powered-by');
+
+// Environment-specific configuration
+if (env === 'production') {
+  app.use(logger('combined'));
+}
+else {
+  app.use(logger('dev'));
+  app.use(errorHandler({dumpExceptions: true, showStack: true}));
+}
 
 var fontFaceTemplate = fs.readFileSync('./css/font-face-template.css', 'utf8');
 

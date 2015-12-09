@@ -6,7 +6,6 @@ var express = require('express');
 var http = require('http');
 var fs = require('fs');
 var interpolate = require('interpolate');
-var glob = require("glob");
 var logger = require('morgan');
 var errorHandler = require('errorhandler');
 var app = express();
@@ -26,16 +25,7 @@ else {
 var fontFaceTemplate = fs.readFileSync('./css/font-face-template.css', 'utf8');
 
 // TOOD extract this into module
-var availableFonts = {};
-glob.sync("./public/fonts/*.@(woff|woff2)").forEach(function(fontPath) {
-  var filename = fontPath.replace("./public/fonts/", "").replace(/\.woff2?$/, "");
-  var family = filename.split("-")[0];
-  var weight = filename.split("-")[1];
-  availableFonts[family] = availableFonts[family] || [];
-  if (availableFonts[family].indexOf(weight) === -1) {
-    availableFonts[family].push(weight);
-  }
-});
+var availableFonts = require("./lib/available_fonts")();
 console.log("Available fonts: ", JSON.stringify(availableFonts, null, 2));
 
 // TOOD extract this into module

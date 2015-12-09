@@ -17,6 +17,8 @@ app.disable('x-powered-by');
 // Environment-specific configuration
 if (env === 'production') {
   app.use(logger('combined'));
+  // Force SSL. Note that trust proxy must be set to work behind reverse proxies (Heroku).
+  app.enable('trust proxy');
   app.use(forceSsl());
 }
 else {

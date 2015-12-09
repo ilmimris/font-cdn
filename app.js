@@ -1,7 +1,7 @@
 'use strict';
 
 var env = process.env.NODE_ENV || 'development';
-var baseUrl = process.env.BASE_URL || 'http://localhost:3000'
+var baseUrl = process.env.BASE_URL || 'http://localhost:3000';
 var express = require('express');
 var http = require('http');
 var fs = require('fs');

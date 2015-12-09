@@ -10,6 +10,7 @@ var logger = require('morgan');
 var errorHandler = require('errorhandler');
 var forceSsl = require('express-enforces-ssl');
 var path = require('path');
+var setCorsHeaders = require(path.join(__dirname, 'lib', 'set-cors-headers'));
 var app = express();
 
 app.set('port', process.env.PORT || 3000);
@@ -40,10 +41,7 @@ var staticMiddleware = express.static('public', {
   maxAge: '30d',
   redirect: false,
   setHeaders: function (res, path, stat) {
-    res.set("access-control-allow-origin", "*");
-    res.set("timing-allow-origin", "*");
-    res.set("x-content-type-options", "nosniff");
-    res.set("x-xss-protection", "1; mode=block");
+    setCorsHeaders(res);
   },
 });
 app.use(staticMiddleware);
@@ -60,13 +58,10 @@ var parseFonts = function(familyQueryString) {
 
 // TOOD extract most of this into above font query string parser module
 app.get("/css", function(req, res, next) {
-  res.set("access-control-allow-origin", "*");
+  setCorsHeaders(res);
   res.set("x-frame-options", "SAMEORIGIN");
   res.set("content-type", "text/css");
-  res.set("timing-allow-origin", "*");
-  res.set("x-content-type-options", "nosniff");
-  res.set("x-xss-protection", "1; mode=block");
-
+  
   var familyQueryString = req.query.family;
   if (!familyQueryString || familyQueryString === "") {
     res.send("Must provide `family` query param.");

@@ -8,6 +8,7 @@ var fs = require('fs');
 var interpolate = require('interpolate');
 var logger = require('morgan');
 var errorHandler = require('errorhandler');
+var forceSsl = require('express-enforces-ssl');
 var app = express();
 
 app.set('port', process.env.PORT || 3000);
@@ -16,6 +17,7 @@ app.disable('x-powered-by');
 // Environment-specific configuration
 if (env === 'production') {
   app.use(logger('combined'));
+  app.use(forceSsl());
 }
 else {
   app.use(logger('dev'));

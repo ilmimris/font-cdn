@@ -13,6 +13,7 @@
   "dependencies": {
     "errorhandler": "^1.4.2",
     "express": "^4.13.3",
+    "express-enforces-ssl": "^1.1.0",
     "glob": "^6.0.1",
     "interpolate": "^0.1.0",
     "morgan": "^1.6.1"

@@ -36,4 +36,9 @@
 
 Add fonts to the `/public/fonts` directory. Only `woff` and `woff2` formats are supported.
 
-The naming format is `{font-family}-{font-weight}.{extension}`. Example: `Futura-100.woff`.
+The naming format is `{font-family}-{font-weight}{font-style}.{extension}`, where `font-style` is optional, and `font-family` should be hyphenated if there are spaces. 
+
+Examples: 
+
+- `Futura-700italic.woff`
+- `Bitstream-Vera-Sans-Mono-400.woff`

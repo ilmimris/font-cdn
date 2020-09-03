@@ -2,8 +2,10 @@
 
 var path = require('path');
 
+var prod = process.env.NODE_ENV !== 'development';
+
 var env = process.env.NODE_ENV || 'development';
-var baseUrl = process.env.BASE_URL || 'http://localhost:3000';
+var baseUrl = process.env.BASE_URL || (!prod) ? 'http://localhost:3000' : 'https://cdn-fonts.netlify.app/.netlify/functions';
 global.__base = __dirname + '/';
 var AvailableFonts = require(path.join(global.__base, 'lib', 'available-fonts'));
 global.fonts = new AvailableFonts();

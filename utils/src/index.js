@@ -1,5 +1,3 @@
-import AvailableFonts from '../../lib/available-fonts';
-
 export { AvailableFonts } from './available-fonts';
 export { Font } from './font';
 export { FontQueryStringParser } from './font-query-string-parser';

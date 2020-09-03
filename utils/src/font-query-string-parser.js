@@ -1,5 +1,5 @@
 var path = require("path");
-var Font = require(path.join(global.__base, "lib", "font"));
+var Font = require("./font");
 
 module.exports = FontQueryStringParser;
 

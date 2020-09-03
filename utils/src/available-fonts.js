@@ -1,7 +1,7 @@
 // Check /public/fonts/ for a list of available font families and font weights.
 var glob = require("glob");
 var path = require("path");
-var Font = require(path.join(global.__base, "lib", "font"));
+var Font = require("./font");
 
 module.exports = AvailableFonts;
 

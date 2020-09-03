@@ -1,7 +1,7 @@
 // Static server for serving up font files.
 var express = require('express');
 var path = require('path');
-var setCorsHeaders = require(path.join(global.__base, 'lib', 'set-cors-headers'));
+var setCorsHeaders = require('./set-cors-headers');
 
 module.exports = express.static('public', {
   dotfiles: 'ignore',

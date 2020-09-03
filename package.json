@@ -12,7 +12,9 @@
   "engines": {
     "node": ">= 5"
   },
-  "dependencies": {},
+  "dependencies": {
+    "utils": "file:utils"
+  },
   "devDependencies": {
     "errorhandler": "^1.4.2",
     "express-enforces-ssl": "^1.1.0",

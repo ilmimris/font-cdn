@@ -1,5 +1,5 @@
 var path = require('path');
-var FontVariant = require(path.join(global.__base, "lib", "font-variant"));
+var FontVariant = require("./font-variant");
 
 module.exports = Font;
 

@@ -5,11 +5,11 @@ const serverless = require('serverless-http');
 const app = express();
 const bodyParser = require('body-parser');
 
-const AvailableFonts = require(path.join(__dirname, '../public/lib/available-fonts'));
+const AvailableFonts = require(path.join(__dirname, '../public/lib/available-fonts.js'));
 global.fonts = new AvailableFonts();
 
-const FontQueryStringParser = require(path.join(__dirname, '../public/lib/font-query-string-parser'));
-const setCorsHeaders = require(path.join(__dirname, '../public/lib/set-cors-headers'));
+const FontQueryStringParser = require(path.join(__dirname, '../public/lib/font-query-string-parser.js'));
+const setCorsHeaders = require(path.join(__dirname, '../public/lib/set-cors-headers.js'));
 const fontFaceTemplate = fs.readFileSync((path.join(__dirname, '../public/css/font-face-template.css')), 'utf8');
 
 
@@ -24,7 +24,7 @@ router.post('/', (req, res) => res.json({ postBody: req.body }));
 
 app.set('etag', false);
 app.set('x-powered-by', false);
-app.use(require(path.join(__dirname, '../public/lib/static-assets-middleware')));
+app.use(require(path.join(__dirname, '../public/lib/static-assets-middleware.js')));
 
 app.use(bodyParser.json());
 app.use('/.netlify/functions/server', router);  // path must route to lambda

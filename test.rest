@@ -1,0 +1,11 @@
+POST https://cdn-fonts.netlify.app/.netlify/functions/server
+Content-Type: application/json
+
+{"json":"POST"}
+
+###
+GET https://cdn-fonts.netlify.app/.netlify/functions/server HTTP/1.1
+
+
+###
+GET https://cdn-fonts.netlify.app/.netlify/functions/fonts/css?family=Bitstream+Vera+Sans+Mono:400italic|Montserrat:400,700 HTTP/1.1

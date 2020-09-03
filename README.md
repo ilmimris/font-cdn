@@ -10,6 +10,12 @@
 
 ```css
 @font-face {
+  font-family: 'Humnst777 Cn BT';
+  src: url('https://cdn.fonts.netlify.app/Humanist-777-Bold-Condensed-BT.ttf');
+}
+
+
+@font-face {
   font-family: 'Bitstream Vera Sans Mono';
   font-weight: 400;
   font-style: italic;

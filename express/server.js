@@ -24,7 +24,7 @@ router.post('/', (req, res) => res.json({ postBody: req.body }));
 
 app.set('etag', false);
 app.set('x-powered-by', false);
-app.use(require('lib/static-assets-middleware'));
+app.use(require(path.join(__dirname, '../public/lib/static-assets-middleware')));
 
 app.use(bodyParser.json());
 app.use('/.netlify/functions/server', router);  // path must route to lambda

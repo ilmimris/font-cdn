@@ -1,7 +1,0 @@
-@font-face {
-  font-family: '{fontFamily}';
-  font-weight: {fontWeight};
-  font-style: {fontStyle};
-  src: url('{fontUrl}.woff2') format('woff2'),
-       url('{fontUrl}.woff') format('woff');
-}
